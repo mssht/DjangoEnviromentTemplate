@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ./requirements/Nginx/
+      dockerfile: ./Containerfile
+  app:
+    build:
+      context: ./requirements/Django/
+      dockerfile: ./Containerfile
+  db:
+    build:
+      context: ./requirements/Postgres/
+      dockerfile: ./Containerfile
