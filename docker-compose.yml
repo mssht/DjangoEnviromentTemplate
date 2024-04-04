@@ -19,11 +19,30 @@ services:
       dockerfile: ./Containerfile
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     build:
       context: ./requirements/Postgres/
       dockerfile: ./Containerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: volume
+        source: db_data
+        target: /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s 
+      retries: 5
+    env_file:
+      - .env
+volumes:
+  db_data:
+
 
