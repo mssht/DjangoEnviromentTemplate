@@ -4,9 +4,9 @@
 
 cd code
 
-python manage.py makemigrations
-python manage.py migrate
-python manage.py collectstatic
+python manage.py makemigrations --no-input
+python manage.py migrate --no-input
+python manage.py collectstatic --no-input
 
 if [ $DEBUG = 1 ]; then
     exec python manage.py runserver 0.0.0.0:8000

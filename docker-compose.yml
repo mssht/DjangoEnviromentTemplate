@@ -4,11 +4,26 @@ services:
     build:
       context: ./requirements/Nginx/
       dockerfile: ./Containerfile
+    ports:
+      - "8000:80"
+    volumes:
+      - type: bind
+        source: ./requirements/Nginx/conf.d/default.conf
+        target: /etc/nginx/conf.d/default.conf
+    depends_on:
+      app:
+        condition: service_healthy
   app:
     build:
       context: ./requirements/Django/
       dockerfile: ./Containerfile
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
   db:
     build:
       context: ./requirements/Postgres/
       dockerfile: ./Containerfile
+
